@@ -10,6 +10,8 @@ public class Gun : MonoBehaviour
     private GunAnimator m_gunAnimator;
     private AmmoAnimator m_ammoAnimator;
 
+    [SerializeField] ParticleSystem m_particleSystem;
+
     [Header("Gun Variables")]
     public bool canReload = true;
 
@@ -51,6 +53,7 @@ public class Gun : MonoBehaviour
         {
             m_gunAnimator.ShootAnimation();
             m_ammoAnimator.AmmoShoot();
+            m_particleSystem.Play();
         }
 
         if (Input.GetMouseButtonDown(1) && m_projectileSequence.BubbleSequence != "" && canReload)

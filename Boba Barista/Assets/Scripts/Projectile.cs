@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -10,6 +11,15 @@ public class Projectile : MonoBehaviour
 
     public string Sequence { get; private set; }
 
+    [Header("Projectile Visuals")]
+    private MeshRenderer m_meshRenderer;
+    private ParticleSystem m_particleSystem;
+
+    void Awake()
+    {
+        m_meshRenderer = GetComponent<MeshRenderer>();
+        m_particleSystem = GetComponentInChildren<ParticleSystem>();
+    }
     void Start()
     {
         Destroy(gameObject, lifetime);
@@ -25,29 +35,42 @@ public class Projectile : MonoBehaviour
         // You can use the sequence here to apply effects, change visuals, etc.
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            EnemySequence enemySeq = collision.gameObject.GetComponentInChildren<EnemySequence>();
+
+            if (enemySeq == null)
             {
-                Enemy enemy = other.GetComponent<Enemy>();
-                EnemySequence enemySeq = other.GetComponentInChildren<EnemySequence>();
-
-                string enemySequence = enemySeq.Sequence;
-
-                //Debug.Log($"Projectile [{Sequence}] vs Enemy [{enemySequence}]");
-
-                if (Sequence == enemySequence)
-                {
-                    Debug.Log("✅ Match!");
-                    enemy.CorrectSequence(); // delegate handling
-                }
-                else
-                {
-                    Debug.Log("❌ Mismatch!");
-                    enemy.WrongSequence(); // delegate handling
-                }
-
-                Destroy(gameObject); // Always destroy projectile after hit
+                Debug.LogWarning("❗ EnemySequence not found on enemy!");
+                return;
             }
+
+            string enemySequence = enemySeq.Sequence;
+
+            if (Sequence == enemySequence)
+            {
+                Debug.Log("✅ Match!");
+                enemy.CorrectSequence(); // delegate handling
+            }
+            else
+            {
+                Debug.Log("❌ Mismatch!");
+                enemy.WrongSequence(); // delegate handling
+            }
+
+            StartCoroutine(ProjectileHit());
+        }
     }
+
+    IEnumerator ProjectileHit()
+    {
+        m_meshRenderer.enabled = false;
+        m_particleSystem.Play();
+        yield return new WaitForSeconds(0.25f);
+        Destroy(gameObject); // Always destroy projectile after hit
+    }
+    
 }
