@@ -125,6 +125,10 @@ public class Projectile : MonoBehaviour
 
             StartCoroutine(ProjectileHit());
         }
+        if (collision.gameObject.CompareTag("Untagged"))
+        {
+            StartCoroutine(ProjectileHit());
+        }
     }
 
     IEnumerator ProjectileHit()

@@ -88,6 +88,7 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator Correct()
     {
+        GameManager.instance.AddScore();
         m_collider.enabled = false;
         m_enemyAnimator.ChangeAnimationState("enemy_satisfied", 0.1f);
         m_enemyMovement.PauseMovement();

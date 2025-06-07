@@ -10982,7 +10982,7 @@ MonoBehaviour:
   reachDistance: 0.1
   loop: 0
   rotationSpeed: 5
-  detectDistance: 1
+  detectDistance: 2.5
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 64
