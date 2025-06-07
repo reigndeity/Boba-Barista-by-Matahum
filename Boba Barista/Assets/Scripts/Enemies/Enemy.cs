@@ -11,8 +11,13 @@ public class Enemy : MonoBehaviour
     private Collider m_collider;
     
     private bool m_isAngry = false;
-    [SerializeField] ParticleSystem m_ParticleSystem;
+    [SerializeField] ParticleSystem m_poofParticle;
+    [SerializeField] ParticleSystem m_angryParticle;
     [SerializeField] GameObject m_enemyModel;
+
+
+    private Coroutine m_correctCoroutine;
+    private Coroutine m_wrongCoroutine;
 
     void Awake()
     {
@@ -22,26 +27,46 @@ public class Enemy : MonoBehaviour
         m_enemyAnimator = GetComponentInChildren<EnemyAnimator>();
         m_uiCanvasGroupFade = GetComponentInChildren<UICanvasGroupFade>();
         m_collider = GetComponent<Collider>();
-        m_ParticleSystem = GetComponentInChildren<ParticleSystem>();
         
     }
     void Start()
     {
         m_collider.enabled = false;
-        m_ParticleSystem.Stop();
     }
 
 
     public void CorrectSequence()
     {
-        StartCoroutine(Correct());
+        if (m_wrongCoroutine != null)
+        {
+            StopCoroutine(m_wrongCoroutine);
+            m_wrongCoroutine = null;
+        }
+        if (m_correctCoroutine != null)
+        {
+            StopCoroutine(m_correctCoroutine);
+            m_correctCoroutine = null;
+        }
+
+        m_correctCoroutine = StartCoroutine(Correct());
     }
     public void WrongSequence()
     {
-        if (m_isAngry == false)
+        if (!m_isAngry)
         {
             m_isAngry = true;
-            StartCoroutine(Wrong());
+            if (m_correctCoroutine != null)
+            {
+                StopCoroutine(m_correctCoroutine);
+                m_correctCoroutine = null;
+            }
+            if (m_wrongCoroutine != null) 
+            {
+                StopCoroutine(m_wrongCoroutine);
+                m_wrongCoroutine = null;
+            }
+
+            m_wrongCoroutine = StartCoroutine(Wrong());
         }
         else
         {
@@ -58,18 +83,18 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         m_collider.enabled = true;
         yield return new WaitForSeconds(0.2f);
-        m_uiCanvasGroupFade.FadeIn(1f);
+        m_uiCanvasGroupFade.FadeIn(0.1f);
     }
 
     public IEnumerator Correct()
     {
         m_collider.enabled = false;
-        m_enemyAnimator.ChangeAnimationState("enemy_satisfied", 0.25f);
+        m_enemyAnimator.ChangeAnimationState("enemy_satisfied", 0.1f);
         m_enemyMovement.PauseMovement();
         m_uiCanvasGroupFade.FadeOut(0.1f);
         yield return new WaitForSeconds(2.01f);
         m_enemyModel.SetActive(false);
-        m_ParticleSystem.Play();
+        m_poofParticle.Play();
         m_enemySpawner.NotifyEnemyDestroyed();
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
@@ -79,6 +104,7 @@ public class Enemy : MonoBehaviour
     {
         m_enemyMovement.PauseMovement();
         m_enemyAnimator.ChangeAnimationState("enemy_angry", 0.25f);
+        m_angryParticle.Play();
         yield return new WaitForSeconds(2.01f);
         m_enemyMovement.speed = 4.5f;
         m_enemyAnimator.ChangeAnimationState("enemy_angryWalk", 0.25f);
