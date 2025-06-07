@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    private Collider m_collider;
+    private Rigidbody m_rigidbody;
     [Header("Projectile Properties")]
     [SerializeField] float lifetime;
 
@@ -12,9 +14,10 @@ public class Projectile : MonoBehaviour
 
     [Header("Projectile Visuals")]
     private MeshRenderer m_meshRenderer;
+    
     [SerializeField] GameObject m_bubbleTeaCup;
-    private Collider m_collider;
-    private ParticleSystem m_particleSystem;
+    [SerializeField] GameObject m_bubbleParticle;
+    [SerializeField] ParticleSystem m_hitParticle;
 
     [Header("Bubble Tea Layers")]
     [SerializeField] private GameObject[] bubbleTeaLayersObj;
@@ -29,8 +32,8 @@ public class Projectile : MonoBehaviour
     void Awake()
     {
         m_meshRenderer = GetComponent<MeshRenderer>();
-        m_particleSystem = GetComponentInChildren<ParticleSystem>();
         m_collider = GetComponent<Collider>();
+        m_rigidbody = GetComponent<Rigidbody>();
     }
 
     void Start()
@@ -126,11 +129,13 @@ public class Projectile : MonoBehaviour
 
     IEnumerator ProjectileHit()
     {
+        m_rigidbody.isKinematic = true;
         m_meshRenderer.enabled = false;
-        m_particleSystem.Play();
+        m_hitParticle.Play();
+        m_bubbleParticle.SetActive(false);
         m_bubbleTeaCup.SetActive(false);
         m_collider.enabled = false;
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
 }
