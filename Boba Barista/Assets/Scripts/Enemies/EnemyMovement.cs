@@ -5,7 +5,7 @@ public class EnemyMovement : MonoBehaviour
 {
     private UICanvasGroupFade m_uiCanvasGroupFade;
     private Enemy m_enemy;
-    
+
     [Header("Phase 1: Go to Center")]
     private Transform[] centerPath;
 
@@ -20,9 +20,13 @@ public class EnemyMovement : MonoBehaviour
     [Header("Rotation Settings")]
     public float rotationSpeed = 5f;
 
-    [Header("Obstacle Detection")]
-    public float detectDistance = 1f;
-    public LayerMask obstacleLayers;
+    [Header("Raycast Detection")]
+    public float enemyDetectDistance = 1f;
+    public LayerMask enemyLayer;
+
+    [Space(10)]
+    public float playerBorderDetectionDistance = 2f;
+    public LayerMask playerBorderLayer;
 
     private int currentWaypointIndex = 0;
     private Transform[] currentPath;
@@ -43,6 +47,12 @@ public class EnemyMovement : MonoBehaviour
 
         Transform target = currentPath[currentWaypointIndex];
         Vector3 direction = (target.position - transform.position).normalized;
+
+        // Stop or react if near player border
+        if (IsNearPlayerBorder(direction))
+        {
+            StartCoroutine(m_enemy.LoseHealth());
+        }
 
         // Only move if path is clear
         if (!IsBlocked(direction))
@@ -84,12 +94,18 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-
     private bool IsBlocked(Vector3 direction)
     {
-        // Raycast or SphereCast in front of the enemy
+        // Raycast to detect obstacles
         Ray ray = new Ray(transform.position + Vector3.up * 0.5f, direction);
-        return Physics.Raycast(ray, detectDistance, obstacleLayers);
+        return Physics.Raycast(ray, enemyDetectDistance, enemyLayer);
+    }
+
+    private bool IsNearPlayerBorder(Vector3 direction)
+    {
+        // Raycast to detect player border
+        Ray ray = new Ray(transform.position + Vector3.up * 0.5f, direction);
+        return Physics.Raycast(ray, playerBorderDetectionDistance, playerBorderLayer);
     }
 
     public void ChooseNextLane()
@@ -105,14 +121,19 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Visualize obstacle detection
         if (currentPath != null && currentWaypointIndex < currentPath.Length)
         {
             Vector3 dir = (currentPath[currentWaypointIndex].position - transform.position).normalized;
+
+            // Obstacle detection ray (red)
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position + Vector3.up * 0.5f, transform.position + Vector3.up * 0.5f + dir * detectDistance);
+            Gizmos.DrawLine(transform.position + Vector3.up * 0.5f,
+                            transform.position + Vector3.up * 0.5f + dir * enemyDetectDistance);
+
+            // Player border detection ray (blue)
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position + Vector3.up * 0.5f,
+                            transform.position + Vector3.up * 0.5f + dir * playerBorderDetectionDistance);
         }
     }
-
-
 }

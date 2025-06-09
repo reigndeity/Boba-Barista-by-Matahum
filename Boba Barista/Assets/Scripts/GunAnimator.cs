@@ -4,10 +4,12 @@ public class GunAnimator : MonoBehaviour
 {
     public Animator animator;
     private GunShooting m_gunShooting;
+    private GunVisuals m_gunVisuals;
 
     void Awake()
     {
         animator = GetComponent<Animator>();
+        m_gunVisuals = GetComponentInParent<GunVisuals>();
     }
     void Start()
     {
@@ -21,5 +23,10 @@ public class GunAnimator : MonoBehaviour
     public void Shoot()
     {
         m_gunShooting.Shoot();
+    }
+
+    public void GunDistorionParticle()
+    {
+        m_gunVisuals.PlayGunDistorion();
     }
 }

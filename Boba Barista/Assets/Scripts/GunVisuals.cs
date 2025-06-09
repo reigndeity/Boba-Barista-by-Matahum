@@ -17,6 +17,9 @@ public class GunVisuals : MonoBehaviour
     [SerializeField] private Material[] tripleFlavorMaterialsL2;
     [SerializeField] private Material[] tripleFlavorMaterialsL3;
 
+    [Header("Gun Distortion Visuals")]
+    [SerializeField] ParticleSystem m_particleSystem;
+
     private void Awake()
     {
         sequence = GetComponent<ProjectileSequence>();
@@ -124,5 +127,10 @@ public class GunVisuals : MonoBehaviour
         {
             obj.SetActive(false);
         }
+    }
+
+    public void PlayGunDistorion()
+    {
+        m_particleSystem.Play();
     }
 }

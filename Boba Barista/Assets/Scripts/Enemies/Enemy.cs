@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] ParticleSystem m_angryParticle;
     [SerializeField] GameObject m_enemyModel;
 
-
+    [SerializeField] LayerMask projectileLayer;
     private Coroutine m_correctCoroutine;
     private Coroutine m_wrongCoroutine;
 
@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour
     public IEnumerator Correct()
     {
         GameManager.instance.AddScore();
-        m_collider.enabled = false;
+        m_collider.excludeLayers = projectileLayer;
         m_enemyAnimator.ChangeAnimationState("enemy_satisfied", 0.1f);
         m_enemyMovement.PauseMovement();
         m_uiCanvasGroupFade.FadeOut(0.1f);
@@ -110,5 +110,19 @@ public class Enemy : MonoBehaviour
         m_enemyMovement.speed = 4.5f;
         m_enemyAnimator.ChangeAnimationState("enemy_angryWalk", 0.25f);
         m_enemyMovement.ContinueMovement();
+    }
+    public IEnumerator LoseHealth()
+    {
+        GameManager.instance.UpdateHealth();
+        m_collider.excludeLayers = projectileLayer;
+        m_enemyMovement.PauseMovement();
+        m_enemyAnimator.ChangeAnimationState("enemy_angry", 0.25f);
+        m_uiCanvasGroupFade.FadeOut(0.1f);
+        yield return new WaitForSeconds(2.01f);
+        m_enemyModel.SetActive(false);
+        m_poofParticle.Play();
+        m_enemySpawner.NotifyEnemyDestroyed();
+        yield return new WaitForSeconds(0.5f);
+        Destroy(gameObject);
     }
 }

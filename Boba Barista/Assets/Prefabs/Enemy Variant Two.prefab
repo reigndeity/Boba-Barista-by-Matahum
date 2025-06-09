@@ -10946,6 +10946,9 @@ MonoBehaviour:
   m_poofParticle: {fileID: 2257764637231546994}
   m_angryParticle: {fileID: 3693015491853627832}
   m_enemyModel: {fileID: 1488110961525138497}
+  projectileLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &2254263597347126047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10982,10 +10985,14 @@ MonoBehaviour:
   reachDistance: 0.1
   loop: 0
   rotationSpeed: 5
-  detectDistance: 2.5
-  obstacleLayers:
+  enemyDetectDistance: 2
+  enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  playerBorderDetectionDistance: 1
+  playerBorderLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &8434709937275896244
 GameObject:
   m_ObjectHideFlags: 0
