@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator GameStart()
     {
+        Cursor.visible = false;
         m_uiCanvasGroupFade.FadeOut(1.5f);
         canPause = true;
         yield return new WaitForSeconds(1.75f);
@@ -176,6 +177,7 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator GameOver()
     {
+        Cursor.visible = true;
         ScoreCheck();
         isGameStart = false;
         m_enemySpawner.StopSpawning();

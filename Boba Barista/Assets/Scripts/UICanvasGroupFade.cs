@@ -6,7 +6,7 @@ public class UICanvasGroupFade : MonoBehaviour
 
     private Coroutine currentFade;
 
-    void Start()
+    void Awake()
     {
         m_canvasGroup = GetComponent<CanvasGroup>();
     }

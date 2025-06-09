@@ -53,12 +53,14 @@ public class UIGameScene : MonoBehaviour
                     pauseHeaderText.text = "PAUSED";
                     pauseButtonHolder.SetActive(true);
                     pauseMenuButtonHolder.SetActive(false);
+                    Cursor.visible = true;
                 }
                 else
                 {
                     GameManager.instance.isGamePaused = false;
                     pausePanel.SetActive(false);
                     Time.timeScale = 1;
+                    Cursor.visible = false;
                 }
             }
         }
@@ -111,6 +113,8 @@ public class UIGameScene : MonoBehaviour
     {
         pauseYesButton.enabled = false;
         pauseNoButton.interactable = false;
+        gameOverYesButton.enabled = false;
+        gameOverNoButton.interactable = false;
         GameManager.instance.m_uiCanvasGroupFade.FadeIn(1.5f);
         yield return new WaitForSecondsRealtime(1.51f);
         SceneManager.LoadScene("MainMenuScene");

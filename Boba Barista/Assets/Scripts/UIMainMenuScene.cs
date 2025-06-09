@@ -1,0 +1,98 @@
+using System.Collections;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class UIMainMenuScene : MonoBehaviour
+{
+    private Tutorial m_tutorial;
+    [Header("Animators")]
+    [SerializeField] Animator m_doorAnimator;
+    [SerializeField] Animator m_cameraAnimator;
+    [Header("Canvas Group")]
+    [SerializeField] UICanvasGroupFade m_titleCanvasGroupFade;
+    [SerializeField] UICanvasGroupFade m_imageCanvasGroupFade;
+
+    [Header("Main Menu Properties")]
+    [SerializeField] Button playButton;
+
+    public GameObject helpPanel;
+    [SerializeField] Button helpButton;
+    public Button backButton;
+    public Button nextButton;
+
+    [SerializeField] GameObject quitConfirmationPanel;
+    [SerializeField] Button quitButton;
+    [SerializeField] Button yesButton;
+    [SerializeField] Button noButton;
+
+    void Awake()
+    {
+        m_tutorial = FindFirstObjectByType<Tutorial>();
+    }
+    void Start()
+    {
+        StartCoroutine(MainMenuStart());
+
+        playButton.onClick.AddListener(OnClickPlay);
+
+        helpButton.onClick.AddListener(OnClickHelp);
+        backButton.onClick.AddListener(OnClickBack);
+        nextButton.onClick.AddListener(OnClickNext);
+
+        quitButton.onClick.AddListener(OnClickQuit);
+        yesButton.onClick.AddListener(OnClickQuitYes);
+        noButton.onClick.AddListener(OnClickQuitNo);
+    }
+
+    public void OnClickPlay()
+    {
+        StartCoroutine(Play());
+    }
+    public void OnClickHelp()
+    {
+        helpPanel.SetActive(true);
+    }
+    public void OnClickBack()
+    {
+        m_tutorial.Back();
+    }
+    public void OnClickNext()
+    {
+        m_tutorial.Next();
+    }
+    public void OnClickQuit()
+    {
+        quitConfirmationPanel.SetActive(true);
+    }
+    public void OnClickQuitYes()
+    {
+        Application.Quit();
+    }
+    public void OnClickQuitNo()
+    {
+        quitConfirmationPanel.SetActive(false);
+    }
+    public IEnumerator Play()
+    {
+        playButton.enabled  = false;
+        helpButton.interactable = false;
+        quitButton.interactable = false;
+        m_titleCanvasGroupFade.FadeOut(1.5f);
+        m_cameraAnimator.SetTrigger("isPlay");
+        yield return new WaitForSeconds(1f);
+        m_doorAnimator.SetTrigger("isOpen");
+        m_imageCanvasGroupFade.FadeIn(1.5f);
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public IEnumerator MainMenuStart()
+    {
+        Time.timeScale = 1;
+        m_imageCanvasGroupFade.FadeOut(3);
+        yield return new WaitForSeconds(1.5f);
+        m_titleCanvasGroupFade.FadeIn(2f);
+    }
+}
