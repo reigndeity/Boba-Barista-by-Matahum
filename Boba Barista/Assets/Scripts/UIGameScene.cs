@@ -68,6 +68,7 @@ public class UIGameScene : MonoBehaviour
 
     public void OnClickResume()
     {
+        Cursor.visible = false;
         GameManager.instance.isGamePaused = false;
         pausePanel.SetActive(false);
         Time.timeScale = 1;

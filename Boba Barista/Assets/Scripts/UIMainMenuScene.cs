@@ -76,6 +76,7 @@ public class UIMainMenuScene : MonoBehaviour
     }
     public IEnumerator Play()
     {
+        Cursor.visible = false;
         playButton.enabled  = false;
         helpButton.interactable = false;
         quitButton.interactable = false;
