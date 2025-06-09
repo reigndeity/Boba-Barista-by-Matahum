@@ -77,9 +77,10 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator ChooseLane()
     {   
+        m_enemyMovement.ChooseNextLane();
+        yield return new WaitForSeconds(3f);
         m_enemySequence.GenerateSequence();
         m_enemySequence.SpawnSequenceVisuals();
-        m_enemyMovement.ChooseNextLane();
         yield return new WaitForSeconds(0.2f);
         m_collider.enabled = true;
         yield return new WaitForSeconds(0.2f);

@@ -1,28 +1,44 @@
 using System.Collections;
+using Febucci.UI;
+using Febucci.UI.Effects;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private EnemySpawner m_enemySpawner;
+    private UIGameScene m_uiGameScene;
 
     [Header("Game Properties")]
     public int difficulty = 0;
+    public bool isGameStart = false;
+    public bool isGamePaused;
+    public bool canPause = true;
+    [SerializeField] TextMeshProUGUI countdownTxt;
+    public UICanvasGroupFade m_uiCanvasGroupFade;
+    [SerializeField] Animator m_doorAnimator;
     
-    [Header("Score properties")]
+    [Header("Score Properties")]
     [SerializeField] TextMeshPro playerScoreTxt;
+    [SerializeField] TextMeshProUGUI currentScoreTxt;
+    [SerializeField] TextMeshProUGUI bestScoreTxt;
+    [SerializeField] TextMeshProUGUI ordersCompletedTxt;
+    private int ordersCompleted;
     public int playerScore = 0;
-
+    
     [Header("Player Health Properties")]
-    private int playerHealth = 5;
+    public int playerHealth = 5;
     [SerializeField] GameObject healthObj;
     [SerializeField] Material[] healthMaterials;
     [SerializeField] TextMeshPro blackHeartTxt;
     [SerializeField] TextMeshPro redHeartTxt;
+    [SerializeField] ShakeBehavior shakeTextProperties;
 
     void Awake()
     {
+        Time.timeScale = 1;
         if (instance != null && instance == this)
         {
             Destroy(this);
@@ -35,10 +51,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         m_enemySpawner = FindFirstObjectByType<EnemySpawner>();
+        m_uiGameScene = FindFirstObjectByType<UIGameScene>();
+        StartCoroutine(GameStart());
     }
 
     public void AddScore()
     {
+        ordersCompleted++;
         switch(difficulty)
         {
             case 0:
@@ -100,25 +119,79 @@ public class GameManager : MonoBehaviour
                 break;
             case 4:
                 currentHealthMat.material = healthMaterials[1];
-                redHeartTxt.text = "FFFF";
+                shakeTextProperties.baseDelay = 0.1f;
+                redHeartTxt.text = "<shake>FFFF</shake>";
                 break;
             case 3:
                 currentHealthMat.material = healthMaterials[2];
-                redHeartTxt.text = "FFF";
+                redHeartTxt.text = "<shake>FFF</shake>";
+                shakeTextProperties.baseDelay = 0.08f;
                 break;
             case 2:
                 currentHealthMat.material = healthMaterials[3];
-                redHeartTxt.text = "FF";
+                redHeartTxt.text = "<shake>FF</shake>";
+                shakeTextProperties.baseDelay = 0.05f;
                 break;
             case 1:
                 currentHealthMat.material = healthMaterials[4];
-                redHeartTxt.text = "F";
+                redHeartTxt.text = "<shake>F</shake>";
+                shakeTextProperties.baseAmplitude = 0.05f;
+                shakeTextProperties.baseDelay = 0.03f;
                 break;
             case 0:
                 currentHealthMat.material = healthMaterials[5];
                 redHeartTxt.text = "";
+                StartCoroutine(GameOver());
+                canPause = false;
                 break;
         }
-        
+    }
+    public IEnumerator GameStart()
+    {
+        m_uiCanvasGroupFade.FadeOut(1.5f);
+        canPause = true;
+        yield return new WaitForSeconds(1.75f);
+        countdownTxt.text = "3";
+        yield return new WaitForSeconds(1);
+        countdownTxt.text = "2";
+        yield return new WaitForSeconds(1);
+        countdownTxt.text = "1";
+        yield return new WaitForSeconds(1);
+        m_enemySpawner.StartSpawning();
+        countdownTxt.text = "SHOOT!";
+        isGameStart = true;
+        yield return new WaitForSeconds(1);
+        m_doorAnimator.SetTrigger("isOpen");
+        StartCoroutine(HeartIntro());
+        countdownTxt.text = "";
+        countdownTxt.enabled = false;
+    }
+    public IEnumerator HeartIntro()
+    {
+        blackHeartTxt.text = "<bounce>FFFFF</bounce>";
+        redHeartTxt.text = "<bounce>FFFFF</bounce>";
+        yield return new WaitForSeconds(1f);
+        blackHeartTxt.text = "</bounce>FFFFF</bounce>";
+        redHeartTxt.text = "</bounce>FFFFF</bounce>";
+    }
+    public IEnumerator GameOver()
+    {
+        ScoreCheck();
+        isGameStart = false;
+        m_enemySpawner.StopSpawning();
+        m_uiGameScene.gameOverPanel.SetActive(true);
+        yield return new WaitForSeconds(1f);
+    }
+
+    public void ScoreCheck()
+    {
+        int bestScore = PlayerPrefs.GetInt("HighScore", 0);
+        bestScoreTxt.text = $"{bestScore}";
+        if (playerScore > bestScore)
+        {
+            PlayerPrefs.SetInt("HighScore", playerScore);
+        }
+        currentScoreTxt.text = $"{playerScore}";
+        ordersCompletedTxt.text = $"{ordersCompleted}";
     }
 }

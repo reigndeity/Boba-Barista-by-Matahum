@@ -26,37 +26,45 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (GameManager.instance.isGameStart == true)
         {
-            m_ingredientButtons.QButtonPressed();
-            m_projectileSequence.AddToSequence("Q");
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                m_ingredientButtons.QButtonPressed();
+                m_projectileSequence.AddToSequence("Q");
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                m_ingredientButtons.WButtonPressed();
+                m_projectileSequence.AddToSequence("W");
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                m_ingredientButtons.EButtonPressed();
+                m_projectileSequence.AddToSequence("E");
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                m_ingredientButtons.RButtonPressed();
+                m_projectileSequence.AddToSequence("R");
+            }
+
+            if (Input.GetMouseButtonDown(0) && m_projectileSequence.BubbleSequence != "")
+            {
+                m_gunAnimator.ShootAnimation();
+                m_ammoAnimator.AmmoShoot();
+            }
+
+            if (Input.GetMouseButtonDown(1) && m_projectileSequence.BubbleSequence != "" && canReload)
+            {
+                m_ammoAnimator.ReloadAnimation();
+                canReload = false;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        else
         {
-            m_ingredientButtons.WButtonPressed();
-            m_projectileSequence.AddToSequence("W");
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            m_ingredientButtons.EButtonPressed();
-            m_projectileSequence.AddToSequence("E");
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            m_ingredientButtons.RButtonPressed();
-            m_projectileSequence.AddToSequence("R");
+            return;    
         }
 
-        if (Input.GetMouseButtonDown(0) && m_projectileSequence.BubbleSequence != "")
-        {
-            m_gunAnimator.ShootAnimation();
-            m_ammoAnimator.AmmoShoot();
-        }
-
-        if (Input.GetMouseButtonDown(1) && m_projectileSequence.BubbleSequence != "" && canReload)
-        {
-            m_ammoAnimator.ReloadAnimation();
-            canReload = false;
-        }
     }
 }

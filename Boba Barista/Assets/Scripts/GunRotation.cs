@@ -8,8 +8,16 @@ public class GunRotation : MonoBehaviour
 
     void Update()
     {
-        float mouseX = Input.mousePosition.x / Screen.width;
-        float targetYRotation = Mathf.Lerp(minYRotation, maxYRotation, mouseX);
-        transform.rotation = Quaternion.Euler(0, targetYRotation, 0f);
+        if (!GameManager.instance.isGamePaused && GameManager.instance.isGameStart)
+        {
+            float mouseX = Input.mousePosition.x / Screen.width;
+            float targetYRotation = Mathf.Lerp(minYRotation, maxYRotation, mouseX);
+            transform.rotation = Quaternion.Euler(0, targetYRotation, 0f);
+        }
+        else
+        {
+            return;
+        }
+
     }
 }

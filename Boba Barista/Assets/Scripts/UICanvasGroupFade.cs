@@ -35,12 +35,12 @@ public class UICanvasGroupFade : MonoBehaviour
     {
         float time = 0f;
         m_canvasGroup.alpha = from;
-        m_canvasGroup.blocksRaycasts = to > 0.5f; // Optional: Block interaction only when visible
+        m_canvasGroup.blocksRaycasts = to > 0.5f;
         m_canvasGroup.interactable = to > 0.5f;
 
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime; // ✨ This makes it independent of Time.timeScale
             m_canvasGroup.alpha = Mathf.Lerp(from, to, time / duration);
             yield return null;
         }

@@ -3,7 +3,27 @@ guid: bc43b6015c983d74da5e50c43f3f571c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cig
+    second: {fileID: 2100000, guid: de334bdb825dfbc468f5e964ea764bb3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Darker Skin.003
+    second: {fileID: 2100000, guid: 62f512d75441ff54fa69cc8b2e26ea0c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leather Jacket.002
+    second: {fileID: 2100000, guid: a2acab55c7fa84641b6310c4fe4b5b72, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White CLoth
+    second: {fileID: 2100000, guid: 9e5f9b725100b914e910e7078fe990b3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -88,7 +108,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.01
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

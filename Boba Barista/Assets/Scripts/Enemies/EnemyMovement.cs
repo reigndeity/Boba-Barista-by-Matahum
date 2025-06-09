@@ -92,6 +92,11 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
         }
+
+        if (GameManager.instance.playerHealth == 0)
+        {
+            PauseMovement();
+        }
     }
 
     private bool IsBlocked(Vector3 direction)
