@@ -23,10 +23,7 @@ public class GunAnimator : MonoBehaviour
     public void Shoot()
     {
         m_gunShooting.Shoot();
-    }
-
-    public void GunDistorionParticle()
-    {
+        AudioGameScene.instance.PlayGunShootSound();
         m_gunVisuals.PlayGunDistorion();
     }
 }

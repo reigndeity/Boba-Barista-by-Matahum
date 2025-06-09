@@ -133,6 +133,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator ProjectileHit()
     {
+        AudioGameScene.instance.PlayProjectileHitSound();
         m_rigidbody.isKinematic = true;
         m_meshRenderer.enabled = false;
         m_hitParticle.Play();

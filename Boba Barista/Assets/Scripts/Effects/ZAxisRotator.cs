@@ -8,26 +8,44 @@ public class ZAxisRotator : MonoBehaviour
     public bool loop = false;           // Enable for continuous oscillation
 
     private Quaternion startRotation;
-    private bool isRotating = false;
+    private Coroutine rotationCoroutine;
 
-    void Start()
+    void Awake()
     {
         startRotation = transform.localRotation;
+    }
 
+    void OnEnable()
+    {
         if (loop)
-            StartCoroutine(RotateZLoop());
+        {
+            // Restart coroutine if looping is enabled
+            rotationCoroutine = StartCoroutine(RotateZLoop());
+        }
+    }
+
+    void OnDisable()
+    {
+        // Clean up coroutine if the object gets disabled
+        if (rotationCoroutine != null)
+        {
+            StopCoroutine(rotationCoroutine);
+            rotationCoroutine = null;
+        }
+
+        transform.localRotation = startRotation; // Reset to original rotation if needed
     }
 
     public void TriggerRotation()
     {
-        if (!isRotating)
-            StartCoroutine(RotateZOnce());
+        if (!loop && rotationCoroutine == null)
+        {
+            rotationCoroutine = StartCoroutine(RotateZOnce());
+        }
     }
 
     private System.Collections.IEnumerator RotateZOnce()
     {
-        isRotating = true;
-
         float timer = 0f;
         float duration = 1f / rotationSpeed;
         Quaternion from = Quaternion.Euler(0, 0, minZRotation);
@@ -53,20 +71,16 @@ public class ZAxisRotator : MonoBehaviour
         }
 
         transform.localRotation = startRotation;
-        isRotating = false;
+        rotationCoroutine = null;
     }
 
     private System.Collections.IEnumerator RotateZLoop()
     {
-        isRotating = true;
-
         while (loop)
         {
             yield return RotateBetweenAngles(minZRotation, maxZRotation);
             yield return RotateBetweenAngles(maxZRotation, minZRotation);
         }
-
-        isRotating = false;
     }
 
     private System.Collections.IEnumerator RotateBetweenAngles(float fromZ, float toZ)

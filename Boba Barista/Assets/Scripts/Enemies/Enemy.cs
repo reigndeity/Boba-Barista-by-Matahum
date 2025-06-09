@@ -95,6 +95,7 @@ public class Enemy : MonoBehaviour
         m_enemyMovement.PauseMovement();
         m_uiCanvasGroupFade.FadeOut(0.1f);
         yield return new WaitForSeconds(2.01f);
+        AudioGameScene.instance.PlayPoofSound();
         m_enemyModel.SetActive(false);
         m_poofParticle.Play();
         m_enemySpawner.NotifyEnemyDestroyed();
@@ -107,6 +108,7 @@ public class Enemy : MonoBehaviour
         m_enemyMovement.PauseMovement();
         m_enemyAnimator.ChangeAnimationState("enemy_angry", 0.25f);
         m_angryParticle.Play();
+        AudioGameScene.instance.PlayAngrySound();
         yield return new WaitForSeconds(2.01f);
         m_enemyMovement.speed = 4.5f;
         m_enemyAnimator.ChangeAnimationState("enemy_angryWalk", 0.25f);

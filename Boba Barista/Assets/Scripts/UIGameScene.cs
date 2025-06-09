@@ -72,26 +72,32 @@ public class UIGameScene : MonoBehaviour
         GameManager.instance.isGamePaused = false;
         pausePanel.SetActive(false);
         Time.timeScale = 1;
+
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickRestart()
     {
         StartCoroutine(RestartingTheGame());
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickPauseMenu()
     {
         pauseHeaderText.text = "ARE YOU SURE?";
         pauseButtonHolder.SetActive(false);
         pauseMenuButtonHolder.SetActive(true);
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickPauseMenuYes()
     {
         StartCoroutine(GoingToMainMenu());
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickPauseMenuNo()
     {
         pauseHeaderText.text = "PAUSED";
         pauseButtonHolder.SetActive(true);
         pauseMenuButtonHolder.SetActive(false);
+        AudioGameScene.instance.PlayButtonClickSound();
     }
 
     public void OnClickGameOverMenu()
@@ -99,16 +105,19 @@ public class UIGameScene : MonoBehaviour
         gameOverHeaderText.text = "ARE YOU SURE?";
         gameOverMenuButtonHolder.SetActive(true);
         valueTextHolder.SetActive(false);
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickGameOverMenuYes()
     {
         StartCoroutine(GoingToMainMenu());
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     public void OnClickGameOverMenuNo()
     {
         gameOverHeaderText.text = "GAME OVER";
         valueTextHolder.SetActive(true);
         gameOverMenuButtonHolder.SetActive(false);
+        AudioGameScene.instance.PlayButtonClickSound();
     }
     IEnumerator GoingToMainMenu()
     {
@@ -117,6 +126,7 @@ public class UIGameScene : MonoBehaviour
         gameOverYesButton.enabled = false;
         gameOverNoButton.interactable = false;
         GameManager.instance.m_uiCanvasGroupFade.FadeIn(1.5f);
+        AudioGameScene.instance.StopGameMusic();
         yield return new WaitForSecondsRealtime(1.51f);
         SceneManager.LoadScene("MainMenuScene");
     }
@@ -129,6 +139,7 @@ public class UIGameScene : MonoBehaviour
         pauseMenuButton.interactable = false;
         gameOverMenuButton.interactable = false;
         GameManager.instance.m_uiCanvasGroupFade.FadeIn(1.5f);
+        AudioGameScene.instance.StopGameMusic();
         yield return new WaitForSecondsRealtime(1.51f);
         SceneManager.LoadScene("GameScene");
     }

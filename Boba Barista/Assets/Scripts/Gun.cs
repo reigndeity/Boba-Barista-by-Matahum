@@ -32,21 +32,25 @@ public class Gun : MonoBehaviour
             {
                 m_ingredientButtons.QButtonPressed();
                 m_projectileSequence.AddToSequence("Q");
+                AudioGameScene.instance.PlayFlavorClickSound();
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
                 m_ingredientButtons.WButtonPressed();
                 m_projectileSequence.AddToSequence("W");
+                AudioGameScene.instance.PlayFlavorClickSound();
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 m_ingredientButtons.EButtonPressed();
                 m_projectileSequence.AddToSequence("E");
+                AudioGameScene.instance.PlayFlavorClickSound();
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 m_ingredientButtons.RButtonPressed();
                 m_projectileSequence.AddToSequence("R");
+                AudioGameScene.instance.PlayFlavorClickSound();
             }
 
             if (Input.GetMouseButtonDown(0) && m_projectileSequence.BubbleSequence != "")
@@ -58,6 +62,7 @@ public class Gun : MonoBehaviour
             if (Input.GetMouseButtonDown(1) && m_projectileSequence.BubbleSequence != "" && canReload)
             {
                 m_ammoAnimator.ReloadAnimation();
+                AudioGameScene.instance.PlayReloadSound();
                 canReload = false;
             }
         }

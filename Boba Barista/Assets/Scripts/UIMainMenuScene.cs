@@ -49,30 +49,37 @@ public class UIMainMenuScene : MonoBehaviour
     public void OnClickPlay()
     {
         StartCoroutine(Play());
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickHelp()
     {
         helpPanel.SetActive(true);
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickBack()
     {
         m_tutorial.Back();
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickNext()
     {
         m_tutorial.Next();
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickQuit()
     {
         quitConfirmationPanel.SetActive(true);
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickQuitYes()
     {
         Application.Quit();
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickQuitNo()
     {
         quitConfirmationPanel.SetActive(false);
+        AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public IEnumerator Play()
     {
@@ -85,12 +92,14 @@ public class UIMainMenuScene : MonoBehaviour
         yield return new WaitForSeconds(1f);
         m_doorAnimator.SetTrigger("isOpen");
         m_imageCanvasGroupFade.FadeIn(1.5f);
+        AudioMainMenuScene.instance.StopGameMusic();
         yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene("GameScene");
     }
 
     public IEnumerator MainMenuStart()
     {
+        AudioMainMenuScene.instance.PlayGameMusic();
         Time.timeScale = 1;
         m_imageCanvasGroupFade.FadeOut(3);
         yield return new WaitForSeconds(1.5f);
