@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
         m_enemySpawner = FindFirstObjectByType<EnemySpawner>();
         m_uiGameScene = FindFirstObjectByType<UIGameScene>();
         StartCoroutine(GameStart());
+        
     }
 
     public void AddScore()
@@ -151,6 +152,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         m_uiCanvasGroupFade.FadeOut(1.5f);
         canPause = true;
+        bestScoreTxt.text = $"{PlayerPrefs.GetInt("HighScore")}";
         yield return new WaitForSeconds(1.75f);
         countdownTxt.text = "3";
         AudioGameScene.instance.PlayReadySound();

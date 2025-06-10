@@ -1076,7 +1076,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -75}
-  m_SizeDelta: {x: 800, y: 107.6}
+  m_SizeDelta: {x: 1500, y: 107.6}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &258451646
 MonoBehaviour:
@@ -3210,6 +3210,7 @@ MonoBehaviour:
   - {fileID: 1251451962}
   - {fileID: 1579811457}
   - {fileID: 1164415790}
+  helpHeaderTxt: {fileID: 258451646}
 --- !u!4 &719327626
 Transform:
   m_ObjectHideFlags: 0

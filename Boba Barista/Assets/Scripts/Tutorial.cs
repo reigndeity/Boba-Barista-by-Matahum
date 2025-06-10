@@ -7,6 +7,7 @@ public class Tutorial : MonoBehaviour
     private UIMainMenuScene m_uiMainMenuScene;
     [SerializeField] private GameObject[] tutorialPanels;
     private int currentTutorial = 0;
+    [SerializeField] TextMeshProUGUI helpHeaderTxt;
 
     void Awake()
     {
@@ -16,6 +17,7 @@ public class Tutorial : MonoBehaviour
     {
         UpdatePanels();
         UpdateButtons();
+        PerformPanelSpecificActions(); // Call this to handle initial state
     }
 
     public void Next()
@@ -25,6 +27,7 @@ public class Tutorial : MonoBehaviour
             currentTutorial++;
             UpdatePanels();
             UpdateButtons();
+            PerformPanelSpecificActions(); // Call after panel change
         }
     }
 
@@ -41,6 +44,7 @@ public class Tutorial : MonoBehaviour
 
         UpdatePanels();
         UpdateButtons();
+        PerformPanelSpecificActions(); // Call after panel change
     }
 
     private void UpdatePanels()
@@ -58,5 +62,30 @@ public class Tutorial : MonoBehaviour
 
         // Back is always interactable now, as per your requirement
         m_uiMainMenuScene.backButton.interactable = true;
+    }
+
+    private void PerformPanelSpecificActions()
+    {
+        switch (currentTutorial)
+        {
+            case 0:
+                helpHeaderTxt.text = "OBJECTIVE";
+                break;
+            case 1:
+                helpHeaderTxt.text = "KEYBOARD CONTROLS";
+                break;
+            case 2:
+                helpHeaderTxt.text = "KEYBOARD CONTROLS";
+                break;
+            case 3:
+                helpHeaderTxt.text = "MOUSE CONTROLS";
+                break;
+            case 4:
+                helpHeaderTxt.text = "MOUSE CONTROLS";
+                break;
+            case 5:
+                helpHeaderTxt.text = "HEALTH";
+                break;
+        }
     }
 }
