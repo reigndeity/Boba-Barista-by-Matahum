@@ -27,7 +27,11 @@ public class Tutorial : MonoBehaviour
             currentTutorial++;
             UpdatePanels();
             UpdateButtons();
-            PerformPanelSpecificActions(); // Call after panel change
+            PerformPanelSpecificActions();
+        }
+        else
+        {
+            m_uiMainMenuScene.helpPanel.SetActive(false);
         }
     }
 
@@ -57,10 +61,10 @@ public class Tutorial : MonoBehaviour
 
     private void UpdateButtons()
     {
-        // Next is only interactable if we're not on the last panel
-        m_uiMainMenuScene.nextButton.interactable = currentTutorial < tutorialPanels.Length - 1;
+        m_uiMainMenuScene.nextButton.GetComponentInChildren<TextMeshProUGUI>().text =
+            currentTutorial == tutorialPanels.Length - 1 ? "CLOSE" : "NEXT";
 
-        // Back is always interactable now, as per your requirement
+        m_uiMainMenuScene.nextButton.interactable = true;
         m_uiMainMenuScene.backButton.interactable = true;
     }
 
@@ -87,5 +91,13 @@ public class Tutorial : MonoBehaviour
                 helpHeaderTxt.text = "HEALTH";
                 break;
         }
+    }
+
+    public void ResetTutorial()
+    {
+        currentTutorial = 0;
+        UpdatePanels();
+        UpdateButtons();
+        PerformPanelSpecificActions();
     }
 }

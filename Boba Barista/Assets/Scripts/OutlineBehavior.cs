@@ -31,4 +31,12 @@ public class OutlineBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         tmpText.font = originalFont;
     }
+
+    void OnDisable()
+    {
+        if (tmpText != null)
+        {
+            tmpText.font = originalFont;
+        }
+    }
 }

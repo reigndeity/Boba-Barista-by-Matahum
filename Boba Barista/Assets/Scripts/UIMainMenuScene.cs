@@ -54,6 +54,7 @@ public class UIMainMenuScene : MonoBehaviour
     public void OnClickHelp()
     {
         helpPanel.SetActive(true);
+        m_tutorial.ResetTutorial();
         AudioMainMenuScene.instance.PlayButtonClickSound();
     }
     public void OnClickBack()
